@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "../globals.scss";
+import "../globals.css";
 import Image from "next/image";
 
 export const metadata: Metadata = {

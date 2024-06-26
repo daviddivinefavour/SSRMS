@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Button from "../portal/_components/atoms/Button";
 import Heading from "../portal/_components/atoms/Heading";
 import Input from "../portal/_components/atoms/Input";
@@ -34,7 +35,16 @@ export default function Home() {
           name="password"
           id="password"
         />
-        <Button type="submit" title="login" />
+        <Link href="/portal">
+          <Button
+            type="submit"
+            variant="default"
+            size="lg"
+            className="w-full bg-main-primary-main/95 hover:bg-main-primary-main"
+          >
+            Login
+          </Button>
+        </Link>
       </div>
     </>
   );

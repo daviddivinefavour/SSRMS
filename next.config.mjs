@@ -1,4 +1,16 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "w7.pngwing.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
+};
 
 export default nextConfig;
