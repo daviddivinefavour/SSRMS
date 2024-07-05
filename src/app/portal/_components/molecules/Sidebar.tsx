@@ -1,20 +1,19 @@
-"use client";
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { sidebarItems } from "../../_constants/navmenu";
+'use client'
+import React from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { sidebarItems } from '../../_constants/navmenu'
 
 const Sidebar = ({ sidebarActive, setSidebarActive }) => {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
-  const { students } = sidebarItems;
-
+  const { students } = sidebarItems
   return (
     <>
       <div
         className={`fixed z-40 flex flex-col gap-3 h-screen w-[268px] bg-white p-[32px] animate overflow-y-auto max-xl:-left-[300px] max-xl:[&.active]:left-0 border-r-[1px] border-solid border-[#EDEDED] ${
-          sidebarActive ? "active" : ""
+          sidebarActive ? 'active' : ''
         }`}
       >
         <Image
@@ -34,7 +33,7 @@ const Sidebar = ({ sidebarActive, setSidebarActive }) => {
             as={item.url}
             className={`flex w-full rounded-lg items-center text-[.85rem] font-medium text-[#ADBCD0] 
               px-4 py-2 gap-2  hover:text-black animate 
-              ${pathname === item.url ? "active" : ""} 
+              ${pathname === item.url ? 'active' : ''} 
               
               [&.active]:bg-main-primary-main/10 [&.active]:text-main-primary-main  hover:text-main-primary-main ${
                 item.special
@@ -55,7 +54,7 @@ const Sidebar = ({ sidebarActive, setSidebarActive }) => {
         ></a>
       )} */}
     </>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

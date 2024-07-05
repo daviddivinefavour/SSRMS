@@ -1,12 +1,10 @@
-"use client";
-import React from "react";
-import { HiBars3 } from "react-icons/hi2";
-import Image from "next/image";
-import { LuBell } from "react-icons/lu";
-import Link from "next/link";
-import { IoChevronDown } from "react-icons/io5";
+'use client'
+import React from 'react'
+import Image from 'next/image'
+import { LuBell } from 'react-icons/lu'
+import { IoChevronDown } from 'react-icons/io5'
 export const dummyAvatarUrl =
-  "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png";
+  'https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png'
 
 const Navbar = () => {
   return (
@@ -21,7 +19,7 @@ const Navbar = () => {
           <span className="block absolute -top-0.5 -right-0.5 border-2 border-white h-3 w-3 rounded-full bg-primary-main"></span>
         </button> */}
 
-        <Image src={""} alt="logo" width={73} height={16} priority />
+        <Image src={'/#'} alt="logo" width={73} height={16} priority />
       </div>
 
       <div className="relative ml-auto">
@@ -52,7 +50,7 @@ const Navbar = () => {
         <IoChevronDown className="text-base text-gray-400 max-sm:hidden" />
       </button>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

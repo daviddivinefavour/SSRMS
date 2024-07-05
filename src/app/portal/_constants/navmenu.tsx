@@ -3,40 +3,45 @@ import {
   LuLayoutDashboard,
   LuMenuSquare,
   LuLogOut,
-} from "react-icons/lu";
+} from 'react-icons/lu'
 
 type MenuItem = {
-  url: string;
-  title: string;
-  icon: React.ReactNode;
-  special?: string;
-};
+  url: string
+  title: string
+  icon: React.ReactNode
+  special?: string
+}
 
 const students: MenuItem[] = [
   {
-    url: "/portal",
-    title: "Dashboard",
+    url: '/portal',
+    title: 'Dashboard',
     icon: <LuLayoutDashboard className="text-[20px]" />,
   },
   {
-    url: "/portal/courses",
-    title: "Courses",
+    url: '/portal/courses',
+    title: 'Courses',
     icon: <LuMenuSquare className="text-[20px]" />,
   },
   {
-    url: "results",
-    title: "Result",
-    icon: <LuBook className="text-[20px]" />,
-    special: "",
+    url: '/portal/courses/register',
+    title: 'Course Registration',
+    icon: <LuMenuSquare className="text-[20px]" />,
   },
   {
-    url: "logout",
-    title: "Logout",
-    icon: <LuLogOut className="text-[20px]" />,
-    special: "mt-auto",
+    url: 'results',
+    title: 'Result',
+    icon: <LuBook className="text-[20px]" />,
+    special: '',
   },
-];
+  {
+    url: 'logout',
+    title: 'Logout',
+    icon: <LuLogOut className="text-[20px]" />,
+    special: 'mt-auto',
+  },
+]
 
 export const sidebarItems = {
   students,
-};
+}

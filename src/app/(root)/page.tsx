@@ -1,7 +1,7 @@
-import Link from "next/link";
-import Button from "../portal/_components/atoms/Button";
-import Heading from "../portal/_components/atoms/Heading";
-import Input from "../portal/_components/atoms/Input";
+import Link from 'next/link'
+import Button from '../portal/_components/atoms/Button'
+import Heading from '../portal/_components/atoms/Heading'
+import Input from '../portal/_components/atoms/Input'
 
 export default function Home() {
   return (
@@ -47,5 +47,5 @@ export default function Home() {
         </Link>
       </div>
     </>
-  );
+  )
 }
