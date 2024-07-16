@@ -12,6 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useEffect } from 'react'
+import { db } from '@/database/config'
+import { supabase } from '@/lib/supabase'
 
 const movies = [
   {
