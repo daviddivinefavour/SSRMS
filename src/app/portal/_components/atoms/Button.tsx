@@ -38,21 +38,17 @@ const buttonVariants = cva(
   }
 );
 
-const Button: React.FC<ButtonProps> = (
-  {
-    onClick,
-    disabled = false,
-    className,
-    children,
-    variant,
-    size,
-    ...buttonProps
-  },
-  ref
-): React.ReactElement => (
+const Button: React.FC<ButtonProps> = ({
+  onClick,
+  disabled = false,
+  className,
+  children,
+  variant,
+  size,
+  ...buttonProps
+}): React.ReactElement => (
   <button
     className={cn(buttonVariants({ variant, size, className }))}
-    ref={ref}
     onClick={onClick}
     disabled={disabled}
     {...buttonProps}

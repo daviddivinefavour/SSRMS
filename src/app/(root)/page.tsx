@@ -1,22 +1,22 @@
-'use client'
-import Button from '../portal/_components/atoms/Button'
-import Heading from '../portal/_components/atoms/Heading'
-import InputField from '../portal/_components/atoms/Input'
-import { useForm } from 'react-hook-form'
+"use client";
+import Button from "../portal/_components/atoms/Button";
+import Heading from "../portal/_components/atoms/Heading";
+import InputField from "../portal/_components/atoms/InputField";
+import { useForm } from "react-hook-form";
 
 type TLoginAttributes = {
-  email: string
-  password: string
-}
+  email: string;
+  password: string;
+};
 export default function Home() {
   const {
     formState: { isLoading, errors },
     register,
     handleSubmit,
-  } = useForm()
+  } = useForm();
 
   const authenticateUser = async (loginDTO) => {
-    console.log('Request body: ', loginDTO)
+    console.log("Request body: ", loginDTO);
 
     // const url = '/api/students'
     // const response = await fetch(url, {
@@ -26,7 +26,7 @@ export default function Home() {
 
     // const data = await response.json()
     // console.log(data)
-  }
+  };
 
   return (
     <>
@@ -72,5 +72,5 @@ export default function Home() {
         </Button>
       </div>
     </>
-  )
+  );
 }
