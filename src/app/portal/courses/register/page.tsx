@@ -13,6 +13,8 @@ import { CourseList, TCourseObj } from './components/CourseList'
 import { Label } from '@/components/ui/label'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { getSession, useSession } from 'next-auth/react'
+import { redirect, useRouter } from 'next/navigation'
 
 type TSelectSession = {
   label: string
@@ -41,9 +43,16 @@ const levels = [
   { value: 'hnd-two', label: 'HND II' },
 ]
 
-export default function RegisterCourses() {
+export default async function RegisterCourses() {
   const [selectedCourses, setSelectedCourses] = useState<TCourseObj[]>([])
   const [showCourseTable, setShowCourseTable] = useState(false)
+
+  const router = useRouter()
+  const session = await getSession()
+
+  if (!session) {
+    return router.push('/')
+  }
 
   const addToSelectedCourses = (course: TCourseObj) => {
     setSelectedCourses([...selectedCourses, course])
