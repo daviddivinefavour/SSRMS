@@ -19,7 +19,7 @@ const Navbar = () => {
           <span className="block absolute -top-0.5 -right-0.5 border-2 border-white h-3 w-3 rounded-full bg-primary-main"></span>
         </button> */}
 
-        <Image src={'/#'} alt="logo" width={73} height={16} priority />
+        {/* <Image src={'/#'} alt="logo" width={73} height={16} priority /> */}
       </div>
 
       <div className="relative ml-auto">

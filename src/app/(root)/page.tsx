@@ -1,32 +1,41 @@
-"use client";
-import Button from "../portal/_components/atoms/Button";
-import Heading from "../portal/_components/atoms/Heading";
-import InputField from "../portal/_components/atoms/InputField";
-import { useForm } from "react-hook-form";
+'use client'
+import UserAuthForm from '@/components/forms/user-auth-form'
+import Button from '../portal/_components/atoms/Button'
+import Heading from '../portal/_components/atoms/Heading'
+import InputField from '../portal/_components/atoms/InputField'
+import { useForm } from 'react-hook-form'
 
-type TLoginAttributes = {
-  email: string;
-  password: string;
-};
+// type TLoginAttributes = {
+//   email: string
+//   password: string
+// }
 export default function Home() {
-  const {
-    formState: { isLoading, errors },
-    register,
-    handleSubmit,
-  } = useForm();
+  // const {
+  //   formState: { isLoading, errors },
+  //   register,
+  //   handleSubmit,
+  // } = useForm()
 
-  const authenticateUser = async (loginDTO) => {
-    console.log("Request body: ", loginDTO);
+  // const authenticateUser = async (loginDTO: {
+  //   email: string
+  //   password: string
+  // }) => {
+  //   const url = '/api/students'
 
-    // const url = '/api/students'
-    // const response = await fetch(url, {
-    //   method: 'POST',
-    //   body: JSON.stringify(loginDTO),
-    // })
+  //   console.log('before making the call from DOM')
 
-    // const data = await response.json()
-    // console.log(data)
-  };
+  //   const response = await fetch(url, {
+  //     method: 'POST',
+  //     body: JSON.stringify(loginDTO),
+  //   })
+
+  //   const data = await response.json()
+
+  //   console.log('Response gotten', data)
+
+  //   // const data = await response.json()
+  //   // console.log(data)
+  // }
 
   return (
     <>
@@ -42,7 +51,8 @@ export default function Home() {
           Sign in to continue...
         </p>
       </div>
-      <div>
+      <UserAuthForm />
+      {/* <div>
         <InputField
           label="Email"
           placeholder="student@example.com"
@@ -70,7 +80,7 @@ export default function Home() {
         >
           Login
         </Button>
-      </div>
+      </div> */}
     </>
-  );
+  )
 }
