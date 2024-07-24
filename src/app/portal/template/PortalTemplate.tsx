@@ -3,7 +3,9 @@ import { useState } from "react";
 import Navbar from "../_components/molecules/Navbar";
 import Sidebar from "../_components/molecules/Sidebar";
 
-const PortalTemplate = ({ children }) => {
+const PortalTemplate = ({
+  children,
+}: Readonly<{ children: React.ReactNode }>) => {
   const [sidebar, setSidebar] = useState<boolean>(false);
   return (
     <section className="relative">
