@@ -25,13 +25,14 @@ const Sidebar = ({ sidebarActive, setSidebarActive }) => {
           height={100}
         />
         {/* <h1 className="font-bold text-xl mb-2">Student Portal</h1> */}
-
-        {students.map((item) => (
-          <Link
-            href={item.url}
-            key={item.url}
-            as={item.url}
-            className={`flex w-full rounded-lg items-center text-[.85rem] font-medium text-[#ADBCD0] 
+        {students.map((item) => {
+          if (item.title !== 'Logout') {
+            return (
+              <Link
+                href={item.url}
+                key={item.url}
+                as={item.url}
+                className={`flex w-full rounded-lg items-center text-[.85rem] font-medium text-[#ADBCD0] 
               px-4 py-2 gap-2  hover:text-black animate 
               ${pathname === item.url ? 'active' : ''} 
               
@@ -39,11 +40,31 @@ const Sidebar = ({ sidebarActive, setSidebarActive }) => {
                 item.special
               }
             `}
-          >
-            {item.icon}
-            <span>{item.title}</span>
-          </Link>
-        ))}
+              >
+                {item.icon}
+                <span>{item.title}</span>
+              </Link>
+            )
+          }
+          return (
+            <Link
+              href={item.url}
+              key={item.url}
+              as={item.url}
+              className={`flex w-full rounded-lg items-center text-[.85rem] font-medium text-[#ADBCD0] 
+              px-4 py-2 gap-2  hover:text-black animate 
+              ${pathname === item.url ? 'active' : ''} 
+              
+              [&.active]:bg-main-primary-main/10 [&.active]:text-main-primary-main  hover:text-main-primary-main ${
+                item.special
+              }
+            `}
+            >
+              {item.icon}
+              <span>{item.title}</span>
+            </Link>
+          )
+        })}
       </div>
 
       {/* {sidebarActive && (

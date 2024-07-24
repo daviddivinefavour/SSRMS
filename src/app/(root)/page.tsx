@@ -10,33 +10,6 @@ import { useForm } from 'react-hook-form'
 //   password: string
 // }
 export default function Home() {
-  // const {
-  //   formState: { isLoading, errors },
-  //   register,
-  //   handleSubmit,
-  // } = useForm()
-
-  // const authenticateUser = async (loginDTO: {
-  //   email: string
-  //   password: string
-  // }) => {
-  //   const url = '/api/students'
-
-  //   console.log('before making the call from DOM')
-
-  //   const response = await fetch(url, {
-  //     method: 'POST',
-  //     body: JSON.stringify(loginDTO),
-  //   })
-
-  //   const data = await response.json()
-
-  //   console.log('Response gotten', data)
-
-  //   // const data = await response.json()
-  //   // console.log(data)
-  // }
-
   return (
     <>
       <div className="mb-[40px]">
