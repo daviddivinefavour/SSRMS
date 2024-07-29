@@ -1,0 +1,18 @@
+The objective of the system are as follows:
+Actors 
+- Students 
+     - Must be secured: should authenticate a student before allowing them into their student area.
+     - See list of available courses for a semester.
+     - Register Course: A student can register for courses in a semester. 
+     - View Registered Courses: A student can view courses he has previously registered. 
+     - View Results for selected semester after result must have been computed.
+- Lecturers 
+     - Secured Login
+     - See course(s) allocated to him
+     - See list of students registered for his course
+     - upload students course results.
+- Administrator 
+     - Upload courses 
+     - Allocate course 
+     - Deprecate course 
+     - View course list 

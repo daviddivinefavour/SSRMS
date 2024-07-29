@@ -4,8 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { sidebarItems } from '../../_constants/navmenu'
+import { Button } from '@/components/ui/button'
+import { signOut } from 'next-auth/react'
+import { LuLogOut } from 'react-icons/lu'
+import LogOutButton from './LogoutButton'
 
-const Sidebar = ({ sidebarActive, setSidebarActive }) => {
+const Sidebar = ({ sidebarActive, setSidebarActive }: any) => {
   const pathname = usePathname()
 
   const { students } = sidebarItems
@@ -26,26 +30,6 @@ const Sidebar = ({ sidebarActive, setSidebarActive }) => {
         />
         {/* <h1 className="font-bold text-xl mb-2">Student Portal</h1> */}
         {students.map((item) => {
-          if (item.title !== 'Logout') {
-            return (
-              <Link
-                href={item.url}
-                key={item.url}
-                as={item.url}
-                className={`flex w-full rounded-lg items-center text-[.85rem] font-medium text-[#ADBCD0] 
-              px-4 py-2 gap-2  hover:text-black animate 
-              ${pathname === item.url ? 'active' : ''} 
-              
-              [&.active]:bg-main-primary-main/10 [&.active]:text-main-primary-main  hover:text-main-primary-main ${
-                item.special
-              }
-            `}
-              >
-                {item.icon}
-                <span>{item.title}</span>
-              </Link>
-            )
-          }
           return (
             <Link
               href={item.url}
@@ -65,6 +49,7 @@ const Sidebar = ({ sidebarActive, setSidebarActive }) => {
             </Link>
           )
         })}
+        <LogOutButton />
       </div>
 
       {/* {sidebarActive && (

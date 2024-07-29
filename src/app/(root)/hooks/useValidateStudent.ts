@@ -1,5 +1,6 @@
 import { validateStudentPassword } from '@/lib/bcryptjs'
 import { supabase } from '@/lib/supabase'
+import { hashSync } from 'bcryptjs'
 
 type Data = {
   message?: string
@@ -17,7 +18,7 @@ type Student = {
 const getStudentByEmail = async (email: string) => {
   try {
     const dataResponse = await supabase
-      .from('students')
+      .from('users')
       .select('*')
       .eq('email', email)
 

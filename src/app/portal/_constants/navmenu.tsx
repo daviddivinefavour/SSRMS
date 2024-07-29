@@ -34,12 +34,6 @@ const students: MenuItem[] = [
     icon: <LuBook className="text-[20px]" />,
     special: '',
   },
-  {
-    url: 'logout',
-    title: 'Logout',
-    icon: <LuLogOut className="text-[20px]" />,
-    special: 'mt-auto',
-  },
 ]
 
 export const sidebarItems = {

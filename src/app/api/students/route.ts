@@ -17,7 +17,7 @@ type Data = {
 const getStudentByEmail = async (email: string) => {
   try {
     const dataResponse = await supabase
-      .from('students')
+      .from('users')
       .select('*')
       .eq('email', email)
 
