@@ -5,10 +5,11 @@ import { parseSignInSchema } from '@/lib/zod'
 import { verifyUser } from '@/app/(root)/hooks/useValidateStudent'
 import { JWT } from 'next-auth/jwt'
 
-type TAuthUser = {
-  id: string
+export type TAuthUser = {
+  id?: string
   name: string
   email: string
+  image?: string
 }
 const handler = NextAuth({
   session: {
