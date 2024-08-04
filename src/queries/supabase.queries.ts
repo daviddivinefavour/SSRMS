@@ -43,8 +43,6 @@ export const getCoursesForAcademicSession = async ({
     .eq('level', level)
     .eq('semester', semester)
 
-  console.log(courses)
-
   if (!courses.data || courses.error) {
     console.error('Failed to fetch available courses')
     return {
