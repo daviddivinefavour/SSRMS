@@ -3,6 +3,7 @@ import '../globals.css'
 import { Poppins } from 'next/font/google'
 import PortalTemplate from './template/PortalTemplate'
 import Providers from '@/context'
+import { ReactQueryProvider } from '@/components/ReactQueryProvider'
 
 export const metadata: Metadata = {
   title: 'KenPoly',
@@ -21,7 +22,9 @@ const PortalLayout = async ({
     <html lang="en">
       <body className={`${poppins.className} bg-slate-50`}>
         <Providers>
-          <PortalTemplate>{children}</PortalTemplate>
+          <PortalTemplate>
+            <ReactQueryProvider>{children}</ReactQueryProvider>
+          </PortalTemplate>
         </Providers>
       </body>
     </html>

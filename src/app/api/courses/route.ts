@@ -16,7 +16,6 @@ export const GET = async (req: NextRequest) => {
     semester,
     sessionId,
   })
-
   if (!courses.isSuccess) {
     return new NextResponse('Unprocessable Entity', {
       status: 422,

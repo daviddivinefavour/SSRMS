@@ -1,18 +1,16 @@
-"use client";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+'use client'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { CourseList, TCourseObj } from "./components/CourseList";
-import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/select'
+import { CourseList, TCourseObj } from './components/CourseList'
+import { Label } from '@/components/ui/label'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,80 +21,60 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { usePaystackPayment } from "react-paystack";
-import { v4 as uuid } from "uuid";
-import { useAuth } from "@/context/auth.context";
-
-type TSelectSession = {
-  label: string;
-  value: string;
-};
-
-type TSelectionProps = {
-  sessions: TSelectSession[];
-};
-
-const sessions = [
-  {
-    label: "2023/2024",
-    value: "2023/2024",
-  },
-  {
-    label: "2022/2023",
-    value: "2022/2023",
-  },
-];
+} from '@/components/ui/alert-dialog'
+import { usePaystackPayment } from 'react-paystack'
+import { v4 as uuid } from 'uuid'
+import { useQuery } from 'react-query'
 
 const levels = [
-  { value: "nd-one", label: "ND I" },
-  { value: "nd-two", label: "ND II" },
-  { value: "hnd-one", label: "HND I" },
-  { value: "hnd-two", label: "HND II" },
-];
+  { value: 'ND1', label: 'ND I' },
+  { value: 'ND2', label: 'ND II' },
+  { value: 'HND1', label: 'HND I' },
+  { value: 'HND2', label: 'HND II' },
+]
 
 export default function RegisterCourses() {
-  const [selectedCourses, setSelectedCourses] = useState<TCourseObj[]>([]);
-  const [showCourseTable, setShowCourseTable] = useState(false);
+  const [selectedCourses, setSelectedCourses] = useState<TCourseObj[]>([])
+  const [showCourseTable, setShowCourseTable] = useState(false)
+  const [selectedSession, setSelectedSession] = useState<string | null>(null)
+  const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
+  const [selectedSemester, setSelectedSemester] = useState<number | null>(null)
 
   const addToSelectedCourses = (course: TCourseObj) => {
-    setSelectedCourses([...selectedCourses, course]);
-  };
+    setSelectedCourses([...selectedCourses, course])
+  }
 
   const removeFromSelectedCourses = (id: number) => {
     setSelectedCourses((prevCourses) =>
       prevCourses.filter((course) => course.id !== id)
-    );
-  };
+    )
+  }
 
   const handleFetchCourse = () => {
-    //TODO: while Check if the user has selected a course already in this collection and disable that course hence it's selected by that student already
-    setShowCourseTable(true);
-  };
+    if (selectedSession && selectedLevel && selectedSemester !== null) {
+      setShowCourseTable(true)
+    } else {
+      alert('Please select session, level, and semester.')
+    }
+  }
 
   const config = {
     reference: uuid(),
-    email: "student1@example.com", // Hardcoded email
+    email: 'student1@example.com', // Hardcoded email
     amount: 50000, // Amount in Kobo, e.g., 50000 Kobo = N500
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!,
-  };
+  }
 
-  const onSuccess = (reference: string) => {
-    // Handle successful payment here
-    console.log("Successfully completed payment, reference ID: ", reference);
-  };
+  const initializePayment = usePaystackPayment(config)
 
-  const onClose = () => {
-    // Handle Paystack dialog closure here
-    console.log("Paystack dialog closed");
-  };
+  const { data, error, isLoading } = useQuery(
+    'academic sessions',
+    fetchSessions
+  )
 
-  const initializePayment = usePaystackPayment(config);
-  /*
-  You can get the user from the global context like this
-  const { user } = useAuth();
-  console.log("user------------", user);
-  */
+  if (isLoading) return <p>Loading...</p>
+  if (error) return <p>Error: {'Unable to fetch sessions, try again later.'}</p>
+
   return (
     <>
       <div className="mb-5">
@@ -110,14 +88,17 @@ export default function RegisterCourses() {
                 <Label className="mb-3 block font-semibold">
                   Select Session
                 </Label>
-                <Select>
+                <Select onValueChange={(value) => setSelectedSession(value)}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Please select session" />
                   </SelectTrigger>
                   <SelectContent>
-                    {sessions.map((session) => (
-                      <SelectItem value={session.value} key={session.value}>
-                        {session.label}
+                    {data.map((session: any) => (
+                      <SelectItem
+                        value={session.session_name}
+                        key={session.session_name}
+                      >
+                        {session.session_name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -125,7 +106,7 @@ export default function RegisterCourses() {
               </div>
               <div className="mt-4">
                 <Label className="mb-3 block font-semibold">Select Level</Label>
-                <Select>
+                <Select onValueChange={(value) => setSelectedLevel(value)}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Please select level" />
                   </SelectTrigger>
@@ -140,17 +121,15 @@ export default function RegisterCourses() {
               </div>
               <div className="mt-4">
                 <Label className="mb-3 block font-semibold">Semester</Label>
-                <Select>
+                <Select
+                  onValueChange={(value) => setSelectedSemester(Number(value))}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Please Select a semester" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="first-semester">
-                      First Semester
-                    </SelectItem>
-                    <SelectItem value="second-semester">
-                      Second Semester
-                    </SelectItem>
+                    <SelectItem value="1">First Semester</SelectItem>
+                    <SelectItem value="2">Second Semester</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -158,6 +137,11 @@ export default function RegisterCourses() {
                 <Button
                   className="w-full hover:bg-secondary hover:text-black"
                   onClick={handleFetchCourse}
+                  disabled={
+                    !selectedSession ||
+                    !selectedLevel ||
+                    selectedSemester === null
+                  }
                 >
                   Process
                 </Button>
@@ -172,13 +156,18 @@ export default function RegisterCourses() {
                 <CardHeader>
                   <div className="flex justify-between">
                     <h4 className="mb-2 font-semibold">Available Courses</h4>
-                    <p>Total Credit Unit: 0</p>
                   </div>
                 </CardHeader>
                 <CardContent className="px-2 pt-2">
                   <CourseList
-                    addToSelectedCourses={addToSelectedCourses}
-                    removeFromSelectedCourses={removeFromSelectedCourses}
+                    level={selectedLevel!}
+                    sessionId={
+                      data.find(
+                        (session: any) =>
+                          session.session_name === selectedSession
+                      )?.id!
+                    }
+                    semester={selectedSemester!}
                   />
                   <hr />
                   <div className="flex justify-end mt-10">
@@ -200,7 +189,7 @@ export default function RegisterCourses() {
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
                           <AlertDialogAction
                             onClick={() => {
-                              initializePayment({ onSuccess, onClose });
+                              initializePayment({ onSuccess, onClose })
                             }}
                           >
                             Proceed
@@ -216,24 +205,21 @@ export default function RegisterCourses() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-// const SelectSession = ({ sessions }: TSelectionProps) => {
-//   return (
-//     <Select>
-//       <SelectTrigger className="w-[180px]">
-//         <SelectValue placeholder="Select a session" />
-//       </SelectTrigger>
-//       <SelectContent>
-//         <SelectGroup>
-//           {sessions.map((item) => (
-//             <SelectItem key={item.value} value={item.value}>
-//               {item.label}
-//             </SelectItem>
-//           ))}
-//         </SelectGroup>
-//       </SelectContent>
-//     </Select>
-//   )
-// }
+const onSuccess = (reference: string) => {
+  // Handle successful payment here
+  console.log('Successfully completed payment, reference ID: ', reference)
+}
+
+const onClose = () => {
+  // Handle Paystack dialog closure here
+  console.log('Paystack dialog closed')
+}
+
+const fetchSessions = async () => {
+  const response = await fetch('/api/sessions')
+  const res = await response.json()
+  return res.data
+}

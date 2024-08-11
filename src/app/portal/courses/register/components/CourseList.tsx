@@ -6,49 +6,66 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import React from "react";
-import { Checkbox } from "@/components/ui/checkbox";
+} from '@/components/ui/table'
+import { Button } from '@/components/ui/button'
+import React from 'react'
+import { Checkbox } from '@/components/ui/checkbox'
+import { useQuery } from 'react-query'
 
 export type TCourseObj = {
-  id: number;
-  title: string;
-  code: string;
-  unit: number;
-};
+  id: number
+  title: string
+  code: string
+  credit_unit: number
+}
 
-const courseList: TCourseObj[] = [
-  {
-    id: 1,
-    title: "COMPUTER TECHNOLOGY I (OO BASIC)",
-    code: "Com 211",
-    unit: 4,
-  },
-  {
-    id: 2,
-    title: "INTRODUCTION TO SYSTEM PROGRAMMING",
-    code: "Com 212",
-    unit: 4,
-  },
-  {
-    id: 3,
-    title: "COMMERCIAL PROGRAMMING LANGUAGE",
-    code: "Com 213",
-    unit: 4,
-  },
-  {
-    id: 4,
-    title: "FILE ORG. & MANAGEMENT",
-    code: "Com 214",
-    unit: 4,
-  },
-];
+// const courseList: TCourseObj[] = [
+//   {
+//     id: 1,
+//     title: 'COMPUTER TECHNOLOGY I (OO BASIC)',
+//     code: 'Com 211',
+//     credit_unit: 4,
+//   },
+//   {
+//     id: 2,
+//     title: 'INTRODUCTION TO SYSTEM PROGRAMMING',
+//     code: 'Com 212',
+//     credit_unit: 4,
+//   },
+//   {
+//     id: 3,
+//     title: 'COMMERCIAL PROGRAMMING LANGUAGE',
+//     code: 'Com 213',
+//     credit_unit: 4,
+//   },
+//   {
+//     id: 4,
+//     title: 'FILE ORG. & MANAGEMENT',
+//     code: 'Com 214',
+//     credit_unit: 4,
+//   },
+// ]
 
 export const CourseList = ({
-  addToSelectedCourses,
-  removeFromSelectedCourses,
+  sessionId,
+  level,
+  semester,
+}: {
+  sessionId: string
+  level: string
+  semester: number
 }) => {
+  const fetchCourses = async () => {
+    const url = `/api/courses?sessionId=${sessionId}&level=${level}&semester=${semester}`
+    const response = await fetch(url)
+    const res = await response.json()
+    return res.data
+  }
+
+  const { data, error, isLoading } = useQuery('courses', fetchCourses)
+
+  if (isLoading) return <p>Loading...</p>
+  if (error) return <p>Error: {'Unable to fetch courses, try again later.'}</p>
   return (
     <Table>
       <TableHeader>
@@ -60,50 +77,20 @@ export const CourseList = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {courseList.map((courseObj: TCourseObj) => {
-          const { id, ...courseDetails } = courseObj;
+        {data.map((courseObj: TCourseObj) => {
+          const { id, title, code, credit_unit } = courseObj
           return (
             <TableRow key={courseObj.code}>
               <TableCell className="text-right">
                 <Checkbox id={`course_${id}`} />
               </TableCell>
-              {Object.values(courseDetails).map((cellItem, index) => (
-                <TableCell className="font-medium" key={`${cellItem}_${index}`}>
-                  {cellItem}
-                </TableCell>
-              ))}
+              <TableCell className="font-medium">{title}</TableCell>
+              <TableCell className="font-medium">{code}</TableCell>
+              <TableCell className="font-medium">{credit_unit}</TableCell>
             </TableRow>
-          );
+          )
         })}
       </TableBody>
     </Table>
-  );
-};
-
-const AddButton = ({
-  addToSelectedCourses,
-  removeFromSelectedCourses,
-  course,
-}) => {
-  const [registerCourse, setRegisterCourse] = React.useState(false);
-  const handleButtonClick = () => {
-    setRegisterCourse((prev) => {
-      if (prev) {
-        removeFromSelectedCourses(course.id);
-      } else {
-        addToSelectedCourses(course);
-      }
-
-      return !prev;
-    });
-  };
-  return (
-    <Button
-      variant={!registerCourse ? "outline" : "destructive"}
-      size={"sm"}
-      onClick={handleButtonClick}
-    >
-      {!registerCourse ? "Add" : "Remove"}
-    </Button>
-  );
-};
+  )
+}
