@@ -40,16 +40,6 @@ export default function RegisterCourses() {
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
   const [selectedSemester, setSelectedSemester] = useState<number | null>(null)
 
-  const addToSelectedCourses = (course: TCourseObj) => {
-    setSelectedCourses([...selectedCourses, course])
-  }
-
-  const removeFromSelectedCourses = (id: number) => {
-    setSelectedCourses((prevCourses) =>
-      prevCourses.filter((course) => course.id !== id)
-    )
-  }
-
   const handleFetchCourse = () => {
     if (selectedSession && selectedLevel && selectedSemester !== null) {
       setShowCourseTable(true)
@@ -60,12 +50,24 @@ export default function RegisterCourses() {
 
   const config = {
     reference: uuid(),
-    email: 'student1@example.com', // Hardcoded email
-    amount: 50000, // Amount in Kobo, e.g., 50000 Kobo = N500
+    email: 'student1@example.com',
+    amount: 50000,
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!,
   }
 
   const initializePayment = usePaystackPayment(config)
+
+  const onSuccess = () => {
+    console.log(
+      'These are the courses selected',
+      selectedCourses.map((obj) => obj.title)
+    )
+  }
+
+  const onClose = () => {
+    // Handle Paystack dialog closure here
+    console.log('Paystack dialog closed')
+  }
 
   const { data, error, isLoading } = useQuery(
     'academic sessions',
@@ -150,72 +152,67 @@ export default function RegisterCourses() {
           </Card>
         </div>
         <div className="col-span-3">
-          <div className="col-span-3">
-            {showCourseTable && (
-              <Card>
-                <CardHeader>
-                  <div className="flex justify-between">
-                    <h4 className="mb-2 font-semibold">Available Courses</h4>
-                  </div>
-                </CardHeader>
-                <CardContent className="px-2 pt-2">
-                  <CourseList
-                    level={selectedLevel!}
-                    sessionId={
-                      data.find(
-                        (session: any) =>
-                          session.session_name === selectedSession
-                      )?.id!
-                    }
-                    semester={selectedSemester!}
-                  />
-                  <hr />
-                  <div className="flex justify-end mt-10">
-                    <AlertDialog>
-                      <AlertDialogTrigger className="bg-black rounded-lg text-[#ffffff] w-full py-3 px-3 hover:bg-secondary hover:text-black">
-                        Continue
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Are you absolutely sure?
-                          </AlertDialogTitle>
-                          <AlertDialogDescription>
-                            You would need to pay ₦500.00 to register the
-                            course(s). Do you want to proceed?
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => {
-                              initializePayment({ onSuccess, onClose })
-                            }}
-                          >
-                            Proceed
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
+          {showCourseTable && (
+            <Card>
+              <CardHeader>
+                <div className="flex justify-between">
+                  <h4 className="mb-2 font-semibold">Available Courses</h4>
+                  <p>
+                    Total Credit Unit:{' '}
+                    {selectedCourses.reduce(
+                      (acc, course) => acc + course.credit_unit,
+                      0
+                    )}
+                  </p>
+                </div>
+              </CardHeader>
+              <CardContent className="px-2 pt-2">
+                <CourseList
+                  level={selectedLevel!}
+                  sessionId={
+                    data.find(
+                      (session: any) => session.session_name === selectedSession
+                    )?.id!
+                  }
+                  semester={selectedSemester!}
+                  onCoursesSelected={setSelectedCourses}
+                />
+                <hr />
+                <div className="flex justify-end mt-10">
+                  <AlertDialog>
+                    <AlertDialogTrigger className="bg-black rounded-lg text-[#ffffff] w-full py-3 px-3 hover:bg-secondary hover:text-black">
+                      Continue
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          You would need to pay ₦500.00 to register the
+                          course(s). Do you want to proceed?
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => {
+                            initializePayment({ onSuccess, onClose })
+                          }}
+                        >
+                          Proceed
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </>
   )
-}
-
-const onSuccess = (reference: string) => {
-  // Handle successful payment here
-  console.log('Successfully completed payment, reference ID: ', reference)
-}
-
-const onClose = () => {
-  // Handle Paystack dialog closure here
-  console.log('Paystack dialog closed')
 }
 
 const fetchSessions = async () => {

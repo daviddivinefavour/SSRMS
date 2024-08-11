@@ -1,15 +1,13 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
-import React from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
 
 export type TCourseObj = {
@@ -19,42 +17,19 @@ export type TCourseObj = {
   credit_unit: number
 }
 
-// const courseList: TCourseObj[] = [
-//   {
-//     id: 1,
-//     title: 'COMPUTER TECHNOLOGY I (OO BASIC)',
-//     code: 'Com 211',
-//     credit_unit: 4,
-//   },
-//   {
-//     id: 2,
-//     title: 'INTRODUCTION TO SYSTEM PROGRAMMING',
-//     code: 'Com 212',
-//     credit_unit: 4,
-//   },
-//   {
-//     id: 3,
-//     title: 'COMMERCIAL PROGRAMMING LANGUAGE',
-//     code: 'Com 213',
-//     credit_unit: 4,
-//   },
-//   {
-//     id: 4,
-//     title: 'FILE ORG. & MANAGEMENT',
-//     code: 'Com 214',
-//     credit_unit: 4,
-//   },
-// ]
-
 export const CourseList = ({
   sessionId,
   level,
   semester,
+  onCoursesSelected,
 }: {
   sessionId: string
   level: string
   semester: number
+  onCoursesSelected: (selectedCourses: TCourseObj[]) => void
 }) => {
+  const [selectedCourses, setSelectedCourses] = useState<TCourseObj[]>([])
+
   const fetchCourses = async () => {
     const url = `/api/courses?sessionId=${sessionId}&level=${level}&semester=${semester}`
     const response = await fetch(url)
@@ -64,8 +39,23 @@ export const CourseList = ({
 
   const { data, error, isLoading } = useQuery('courses', fetchCourses)
 
+  const handleCheckboxChange = (course: TCourseObj, checked: boolean) => {
+    setSelectedCourses((prevSelectedCourses) => {
+      if (checked) {
+        return [...prevSelectedCourses, course]
+      } else {
+        return prevSelectedCourses.filter((c) => c.id !== course.id)
+      }
+    })
+  }
+
+  useEffect(() => {
+    onCoursesSelected(selectedCourses)
+  }, [selectedCourses, onCoursesSelected])
+
   if (isLoading) return <p>Loading...</p>
   if (error) return <p>Error: {'Unable to fetch courses, try again later.'}</p>
+
   return (
     <Table>
       <TableHeader>
@@ -82,7 +72,12 @@ export const CourseList = ({
           return (
             <TableRow key={courseObj.code}>
               <TableCell className="text-right">
-                <Checkbox id={`course_${id}`} />
+                <Checkbox
+                  id={`course_${id}`}
+                  onCheckedChange={(checked: boolean) =>
+                    handleCheckboxChange(courseObj, checked)
+                  }
+                />
               </TableCell>
               <TableCell className="font-medium">{title}</TableCell>
               <TableCell className="font-medium">{code}</TableCell>
