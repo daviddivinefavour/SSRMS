@@ -23,9 +23,12 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { usePaystackPayment } from 'react-paystack'
-import { v4 as uuid } from 'uuid'
+import { v4 as uuid, v4 } from 'uuid'
 import { useQuery } from 'react-query'
-
+import { useAuth } from '@/context/auth.context'
+import axios from 'axios'
+import { useMutation, useQueryClient } from 'react-query'
+import { TCreateEnrollment } from '@/queries/supabase.types'
 const levels = [
   { value: 'ND1', label: 'ND I' },
   { value: 'ND2', label: 'ND II' },
@@ -39,6 +42,8 @@ export default function RegisterCourses() {
   const [selectedSession, setSelectedSession] = useState<string | null>(null)
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
   const [selectedSemester, setSelectedSemester] = useState<number | null>(null)
+  const user = useAuth()
+  const queryClient = useQueryClient()
 
   const handleFetchCourse = () => {
     if (selectedSession && selectedLevel && selectedSemester !== null) {
@@ -55,24 +60,41 @@ export default function RegisterCourses() {
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!,
   }
 
+  const { data, error, isLoading } = useQuery(
+    'academic sessions',
+    fetchSessions
+  )
+
   const initializePayment = usePaystackPayment(config)
 
+  const enrollCourses = async () => {
+    const postData: TCreateEnrollment = {
+      courseIds: selectedCourses.map((obj) => obj.id),
+      sessionId: data.find(
+        (session: any) => session.session_name === selectedSession
+      )?.id!,
+      semester: selectedSemester!,
+      level: selectedLevel!,
+      studentId: user.user.id,
+    }
+
+    const response = await axios.post('/api/courses', postData)
+    return response.data
+  }
+  const mutation = useMutation(enrollCourses, {
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries('courses')
+    },
+  })
   const onSuccess = () => {
-    console.log(
-      'These are the courses selected',
-      selectedCourses.map((obj) => obj.title)
-    )
+    mutation.mutate()
   }
 
   const onClose = () => {
     // Handle Paystack dialog closure here
     console.log('Paystack dialog closed')
   }
-
-  const { data, error, isLoading } = useQuery(
-    'academic sessions',
-    fetchSessions
-  )
 
   if (isLoading) return <p>Loading...</p>
   if (error) return <p>Error: {'Unable to fetch sessions, try again later.'}</p>

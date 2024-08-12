@@ -1,4 +1,5 @@
 import {
+  createCourseEnrollment,
   getAcademicSessionsQuery,
   getCoursesForAcademicSession,
 } from '@/queries/supabase.queries'
@@ -17,7 +18,7 @@ export const GET = async (req: NextRequest) => {
     sessionId,
   })
   if (!courses.isSuccess) {
-    return new NextResponse('Unprocessable Entity', {
+    return new NextResponse('Failed to fetch course list', {
       status: 422,
       statusText: 'Unprocessable Entity',
     })
@@ -26,4 +27,34 @@ export const GET = async (req: NextRequest) => {
     message: 'Successfully fetched courses',
     data: courses.data,
   })
+}
+
+export const POST = async (req: NextRequest) => {
+  try {
+    const { sessionId, studentId, semester, level, courseIds } =
+      await req.json()
+
+    const enrolled = await createCourseEnrollment({
+      sessionId,
+      studentId,
+      semester,
+      level,
+      courseIds,
+    })
+    if (!enrolled.isSuccess) {
+      return new NextResponse('Failed to enroll for courses', {
+        status: 422,
+        statusText: 'Unprocessable Entity',
+      })
+    }
+    return NextResponse.json({
+      message: 'Successfully enrolled courses',
+      data: enrolled.data,
+    })
+  } catch (error) {
+    console.log('Error from api', error)
+    return new NextResponse('Internal Server Error', {
+      status: 500,
+    })
+  }
 }

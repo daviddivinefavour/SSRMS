@@ -25,35 +25,6 @@ export default function Home() {
         </p>
       </div>
       <UserAuthForm />
-      {/* <div>
-        <InputField
-          label="Email"
-          placeholder="student@example.com"
-          type="email"
-          className="mb-[20px]"
-          register={register}
-          name="email"
-          id="email"
-        />
-        <InputField
-          label="Password"
-          placeholder="!#@$ABcd!!1234"
-          type="password"
-          className="mb-[48px]"
-          name="password"
-          register={register}
-          id="password"
-        />
-        <Button
-          type="button"
-          variant="default"
-          size="lg"
-          onClick={handleSubmit(authenticateUser)}
-          className="w-full bg-main-primary-main/95 hover:bg-main-primary-main"
-        >
-          Login
-        </Button>
-      </div> */}
     </>
   )
 }

@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
 
 export type TCourseObj = {
-  id: number
+  id: string
   title: string
   code: string
   credit_unit: number
