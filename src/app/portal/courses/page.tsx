@@ -1,8 +1,8 @@
-"use client";
-import { Card, CardContent } from "@/components/ui/card";
-import { CourseTable } from "../page";
-import Image from "next/image";
-import { dummyAvatarUrl } from "../_components/molecules/Navbar";
+'use client'
+import { Card, CardContent } from '@/components/ui/card'
+import { CourseTable } from '../page'
+import Image from 'next/image'
+import { dummyAvatarUrl } from '../_components/molecules/Navbar'
 import {
   Select,
   SelectContent,
@@ -11,63 +11,61 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useEffect } from "react";
-import { db } from "@/database/config";
-import { supabase } from "@/lib/supabase";
+} from '@/components/ui/select'
+import { useEffect } from 'react'
 
 const movies = [
   {
     id: 1,
-    title: "COMPUTER TECHNOLOGY I (OO BASIC)",
-    code: "Com 211",
-    unit: "4",
+    title: 'COMPUTER TECHNOLOGY I (OO BASIC)',
+    code: 'Com 211',
+    unit: '4',
     lecturer: {
-      name: "Dr. Phia P.Z",
-      image: "",
+      name: 'Dr. Phia P.Z',
+      image: '',
     },
-    status: "Approved",
+    status: 'Approved',
   },
   {
     id: 2,
-    title: "INTRODUCTION TO SYSTEM PROGRAMMING",
-    code: "Com 212",
-    unit: "4",
+    title: 'INTRODUCTION TO SYSTEM PROGRAMMING',
+    code: 'Com 212',
+    unit: '4',
     lecturer: {
-      name: "Dr. Phia P.Z",
-      image: "",
+      name: 'Dr. Phia P.Z',
+      image: '',
     },
-    status: "Approved",
+    status: 'Approved',
   },
   {
     id: 3,
-    title: "COMMERCIAL PROGRAMMING LANGUAGE",
-    code: "Com 213",
-    unit: "4",
+    title: 'COMMERCIAL PROGRAMMING LANGUAGE',
+    code: 'Com 213',
+    unit: '4',
     lecturer: {
-      name: "Dr. Phia P.Z",
-      image: "",
+      name: 'Dr. Phia P.Z',
+      image: '',
     },
-    status: "Enrol Now",
+    status: 'Enrol Now',
   },
   {
     id: 4,
-    title: "FILE ORG. & MANAGEMENT",
-    code: "Com 214",
-    unit: "4",
+    title: 'FILE ORG. & MANAGEMENT',
+    code: 'Com 214',
+    unit: '4',
     lecturer: {
-      name: "Dr. Phia P.Z",
-      image: "",
+      name: 'Dr. Phia P.Z',
+      image: '',
     },
-    status: "Approved",
+    status: 'Approved',
   },
-];
+]
 
 const columns = [
   {
-    accessorKey: "title",
-    header: "Course Title",
-    className: "px-3 py-3 font-medium w-2/3",
+    accessorKey: 'title',
+    header: 'Course Title',
+    className: 'px-3 py-3 font-medium w-2/3',
     formatter: (data: any, _) => (
       <>
         <p className="font-semibold text-[.75rem] uppercase">{data.code}</p>
@@ -76,9 +74,9 @@ const columns = [
     ),
   },
   {
-    accessorKey: "title",
-    header: "Lecturer",
-    className: "px-3 py-3 font-medium w-1/6",
+    accessorKey: 'title',
+    header: 'Lecturer',
+    className: 'px-3 py-3 font-medium w-1/6',
     formatter: (data: any, _) => (
       <div className="flex gap-1">
         <Image
@@ -93,43 +91,43 @@ const columns = [
     ),
   },
   {
-    accessorKey: "unit",
-    header: "Credit Unit",
-    className: "px-3 py-3 font-medium flex justify-center items-center w-1/6",
+    accessorKey: 'unit',
+    header: 'Credit Unit',
+    className: 'px-3 py-3 font-medium flex justify-center items-center w-1/6',
     formatter: (data: any, _) => (
       <p className="font-normal text-[.75rem]">{data.unit}</p>
     ),
   },
   {
-    accessorKey: "status",
-    header: "Status",
-    className: "px-3 py-3 font-medium w-1/6 flex justify-start items-center",
+    accessorKey: 'status',
+    header: 'Status',
+    className: 'px-3 py-3 font-medium w-1/6 flex justify-start items-center',
     formatter: (data: any, _) => (
       <p
         className={`font-normal text-[.65rem] ${
-          data.status === "Enrol Now"
-            ? "bg-main-primary-main cursor-pointer text-white px-2"
-            : data.status === "Approved"
-            ? "bg-green-100 text-green-700"
-            : ""
+          data.status === 'Enrol Now'
+            ? 'bg-main-primary-main cursor-pointer text-white px-2'
+            : data.status === 'Approved'
+            ? 'bg-green-100 text-green-700'
+            : ''
         }  rounded text-center uppercase px-1`}
       >
         {data.status}
       </p>
     ),
   },
-];
+]
 
 const sessions = [
   {
-    label: "2023/2024",
-    value: "2023/2024",
+    label: '2023/2024',
+    value: '2023/2024',
   },
   {
-    label: "2022/2023",
-    value: "2022/2023",
+    label: '2022/2023',
+    value: '2022/2023',
   },
-];
+]
 
 const Courses = () => {
   return (
@@ -138,7 +136,7 @@ const Courses = () => {
         <div className="">
           <h1 className="font-bold text-2xl">Courses</h1>
           <p className="font-normal text-sm my-1">
-            Program: Higher National Diploma (HND 1) - Fulltime{" "}
+            Program: Higher National Diploma (HND 1) - Fulltime{' '}
           </p>
           <p className="font-normal text-sm">Session: 2023/2024</p>
         </div>
@@ -178,18 +176,18 @@ const Courses = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Courses;
+export default Courses
 type TSelectSession = {
-  label: string;
-  value: string;
-};
+  label: string
+  value: string
+}
 
 type TSelectionProps = {
-  sessions: TSelectSession[];
-};
+  sessions: TSelectSession[]
+}
 
 export const SelectSession = ({ sessions }: TSelectionProps) => {
   return (
@@ -208,5 +206,5 @@ export const SelectSession = ({ sessions }: TSelectionProps) => {
         </SelectGroup>
       </SelectContent>
     </Select>
-  );
-};
+  )
+}

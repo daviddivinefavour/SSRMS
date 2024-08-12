@@ -7,6 +7,7 @@ enum ENTITIES {
   SESSION = 'sessions',
   USER = 'users',
   COURSE = 'courses',
+  ENROLLMENTS = 'enrollments',
 }
 
 export const getAcademicSessionsQuery = async (): Promise<
@@ -75,5 +76,31 @@ export const createCourseEnrollment = async (
   }
   return {
     isSuccess: true,
+  }
+}
+
+export const getEnrolledCoursesForAcademicSession = async ({
+  sessionId,
+  userId,
+}: {
+  sessionId: string
+  userId: string
+}) => {
+  const { data, error } = await supabase
+    .from(ENTITIES.ENROLLMENTS)
+    .select('*')
+    .eq('session_id', sessionId)
+    .eq('user_id', userId)
+
+  if (!data || error) {
+    console.error('Failed to fetch available courses')
+    return {
+      isSuccess: false,
+    }
+  }
+
+  return {
+    isSuccess: true,
+    data,
   }
 }

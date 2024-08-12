@@ -78,7 +78,7 @@ export default function RegisterCourses() {
       studentId: user.user.id,
     }
 
-    const response = await axios.post('/api/courses', postData)
+    const response = await axios.post('/api/registered-courses', postData)
     return response.data
   }
   const mutation = useMutation(enrollCourses, {
