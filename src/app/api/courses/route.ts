@@ -1,6 +1,7 @@
 import {
   createCourseEnrollment,
   getAcademicSessionsQuery,
+  getAllCoursesForASessionAndLevel,
   getCoursesForAcademicSession,
 } from '@/queries/supabase.queries'
 import { NextRequest, NextResponse } from 'next/server'
@@ -11,11 +12,13 @@ export const GET = async (req: NextRequest) => {
   const level = searchParams.get('level')!
   const semester = searchParams.get('semester')!
 
-  const courses = await getCoursesForAcademicSession({
-    level,
-    semester,
-    sessionId,
-  })
+  const courses = semester
+    ? await getCoursesForAcademicSession({
+        level,
+        semester,
+        sessionId,
+      })
+    : await getAllCoursesForASessionAndLevel({ sessionId, level })
   if (!courses.isSuccess) {
     return new NextResponse('Failed to fetch course list', {
       status: 422,

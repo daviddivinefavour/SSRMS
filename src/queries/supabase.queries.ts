@@ -104,3 +104,29 @@ export const getEnrolledCoursesForAcademicSession = async ({
     data,
   }
 }
+
+export const getAllCoursesForASessionAndLevel = async ({
+  sessionId,
+  level,
+}: {
+  sessionId: string
+  level: string
+}) => {
+  const { data, error } = await supabase
+    .from(ENTITIES.COURSE)
+    .select('*')
+    .eq('session_id', sessionId)
+    .eq('level', level)
+
+  if (!data || error) {
+    console.error('Failed to fetch available courses')
+    return {
+      isSuccess: false,
+    }
+  }
+
+  return {
+    isSuccess: true,
+    data,
+  }
+}
