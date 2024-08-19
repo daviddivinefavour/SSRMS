@@ -1,12 +1,12 @@
-'use client'
-import React from 'react'
-import Image from 'next/image'
-import { LuBell } from 'react-icons/lu'
-import { IoChevronDown } from 'react-icons/io5'
+"use client";
+import React from "react";
+import Image from "next/image";
+import { LuBell } from "react-icons/lu";
+import { IoChevronDown } from "react-icons/io5";
 export const dummyAvatarUrl =
-  'https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png'
+  "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png";
 
-const Navbar = ({}) => {
+const Navbar = ({ user }: any) => {
   return (
     <nav className="relative flex gap-5 max-sm:gap-4 items-center h-[88px] pl-[11px] pr-[80px] max-xl:pr-[11px] xl:bg-white border-b-[1px] border-solid border-[#EDEDED]">
       <div className="relative ml-auto">
@@ -27,17 +27,15 @@ const Navbar = ({}) => {
 
         <div className="text-left max-sm:hidden">
           <h6 className="text-[#020B17] text-[12px] font-medium leading-[18px]">
-            James Allen
+            {user?.name ?? ""}
           </h6>
           <p className="text-[#4B5460] text-[10px] font-medium leading-[15px]">
-            HA19/1023
+            {user?.level ?? ""}/1023
           </p>
         </div>
-
-        <IoChevronDown className="text-base text-gray-400 max-sm:hidden" />
       </button>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

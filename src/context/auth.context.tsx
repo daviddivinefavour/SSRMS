@@ -10,6 +10,7 @@ import React, {
 type AuthContextType = {
   user: any;
   checkAuthUser: () => Promise<any>;
+  setAuthUser: React.Dispatch<React.SetStateAction<any>>;
   //   login: (email: string, password: string) => Promise<void>;
   //   register: (email: string, password: string) => Promise<void>;
   //   logout: () => void;
@@ -36,7 +37,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const value = useMemo(() => {
-    return { user: authUser, checkAuthUser };
+    return { user: authUser, checkAuthUser, setAuthUser };
   }, [authUser]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

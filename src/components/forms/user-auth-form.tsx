@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { verifyUser } from "@/app/(root)/hooks/useValidateStudent";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { hashString } from "@/lib/bcryptjs";
+import { useAuth } from "@/context/auth.context";
 
 const formSchema = z.object({
   email: z
@@ -60,7 +61,6 @@ export default function UserAuthForm() {
       password,
       redirect: false,
     });
-
     if (response?.error) {
       setFormError(
         "Something went wrong. Please check your email and password and try again."

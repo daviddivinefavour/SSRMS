@@ -1,16 +1,24 @@
-'use client'
-import Image from 'next/image'
-import moment from 'moment'
-import { Card, CardContent } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { CircularProgressbar } from 'react-circular-progressbar'
-import 'react-circular-progressbar/dist/styles.css'
+"use client";
+import Image from "next/image";
+import moment from "moment";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import { useAuth } from "@/context/auth.context";
+import { useEffect, useState } from "react";
 
 const Dashboard = () => {
-  const today = moment().format('MMMM D, YYYY')
-  const coursePercentage = 66
-  const assessmentPercentage = 80
-  const projectPercentage = 90
+  const today = moment().format("MMMM D, YYYY");
+  const { user, checkAuthUser } = useAuth();
+  const coursePercentage = 66;
+  const assessmentPercentage = 80;
+  const projectPercentage = 90;
+  useEffect(() => {
+    if (!user) {
+      checkAuthUser();
+    }
+  }, [user]);
   return (
     <>
       <Card className="py-3">
@@ -19,7 +27,9 @@ const Dashboard = () => {
             <div>
               <small className="block text-[#5a5a5a]">{today}</small>
               <div className="mt-5">
-                <h1 className="font-bold text-2xl">Welcome back, Jame!</h1>
+                <h1 className="font-bold text-2xl">
+                  Welcome back, {user?.name ?? ""}!
+                </h1>
                 <p className="text-sm">
                   Always stay updated in your school portal
                 </p>
@@ -91,12 +101,12 @@ const Dashboard = () => {
                       path: {
                         // Path color
                         stroke: `rgba(254, 98, 2)`,
-                        transform: 'rotate(0.25turn)',
-                        transformOrigin: 'center center',
+                        transform: "rotate(0.25turn)",
+                        transformOrigin: "center center",
                       },
                       text: {
-                        fill: '#fe6202',
-                        fontSize: '16px',
+                        fill: "#fe6202",
+                        fontSize: "16px",
                       },
                     }}
                   />
@@ -119,12 +129,12 @@ const Dashboard = () => {
                       path: {
                         // Path color
                         stroke: `rgba(21, 128, 61 )`,
-                        transform: 'rotate(0.25turn)',
-                        transformOrigin: 'center center',
+                        transform: "rotate(0.25turn)",
+                        transformOrigin: "center center",
                       },
                       text: {
-                        fill: '#15803d',
-                        fontSize: '16px',
+                        fill: "#15803d",
+                        fontSize: "16px",
                       },
                     }}
                   />
@@ -147,12 +157,12 @@ const Dashboard = () => {
                       path: {
                         // Path color
                         stroke: `rgba(0, 37, 243, 1)`,
-                        transform: 'rotate(0.25turn)',
-                        transformOrigin: 'center center',
+                        transform: "rotate(0.25turn)",
+                        transformOrigin: "center center",
                       },
                       text: {
-                        fill: '#0027f2',
-                        fontSize: '16px',
+                        fill: "#0027f2",
+                        fontSize: "16px",
                       },
                     }}
                   />
@@ -163,51 +173,51 @@ const Dashboard = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;
 
 const movies = [
   {
     id: 1,
-    title: 'COMPUTER TECHNOLOGY I (OO BASIC)',
-    code: 'Com 211',
-    unit: '4',
+    title: "COMPUTER TECHNOLOGY I (OO BASIC)",
+    code: "Com 211",
+    unit: "4",
     grade: 4,
-    status: 'Approved',
+    status: "Approved",
   },
   {
     id: 2,
-    title: 'INTRODUCTION TO SYSTEM PROGRAMMING',
-    code: 'Com 212',
-    unit: '4',
+    title: "INTRODUCTION TO SYSTEM PROGRAMMING",
+    code: "Com 212",
+    unit: "4",
     grade: 4,
-    status: 'Approved',
+    status: "Approved",
   },
   {
     id: 3,
-    title: 'COMMERCIAL PROGRAMMING LANGUAGE',
-    code: 'Com 213',
-    unit: '4',
+    title: "COMMERCIAL PROGRAMMING LANGUAGE",
+    code: "Com 213",
+    unit: "4",
     grade: 4,
-    status: 'Approved',
+    status: "Approved",
   },
   {
     id: 4,
-    title: 'FILE ORG. & MANAGEMENT',
-    code: 'Com 214',
-    unit: '4',
+    title: "FILE ORG. & MANAGEMENT",
+    code: "Com 214",
+    unit: "4",
     grade: 4,
-    status: 'Approved',
+    status: "Approved",
   },
-]
+];
 
 const columns = [
   {
-    accessorKey: 'title',
-    header: 'Course Title',
-    className: 'px-3 py-3 font-medium w-2/4',
+    accessorKey: "title",
+    header: "Course Title",
+    className: "px-3 py-3 font-medium w-2/4",
     formatter: (data: any, _) => (
       <>
         <p className="font-semibold text-[.75rem] uppercase">{data.code}</p>
@@ -216,44 +226,44 @@ const columns = [
     ),
   },
   {
-    accessorKey: 'unit',
-    header: 'Credit Unit',
-    className: 'px-3 py-3 font-medium flex justify-center items-center w-1/6',
+    accessorKey: "unit",
+    header: "Credit Unit",
+    className: "px-3 py-3 font-medium flex justify-center items-center w-1/6",
     formatter: (data: any, _) => (
       <p className="font-normal text-[.75rem]">{data.unit}</p>
     ),
   },
   {
-    accessorKey: 'grade',
-    header: 'Grade',
-    className: 'px-3 py-3 font-medium flex justify-center items-center w-1/6',
+    accessorKey: "grade",
+    header: "Grade",
+    className: "px-3 py-3 font-medium flex justify-center items-center w-1/6",
     formatter: (data: any, _) => (
       <p className="font-normal text-[.75rem]">{data.grade}</p>
     ),
   },
   {
-    accessorKey: 'status',
-    header: 'Status',
-    className: 'px-3 py-3 font-medium w-1/6 flex justify-start items-center',
+    accessorKey: "status",
+    header: "Status",
+    className: "px-3 py-3 font-medium w-1/6 flex justify-start items-center",
     formatter: (data: any, _) => (
       <p className="font-normal text-[.65rem] bg-green-100 text-green-700 rounded text-center uppercase px-1">
         {data.status}
       </p>
     ),
   },
-]
+];
 
 type TCoursColumnProp = {
-  accessorKey: string
-  header: string
-  className?: string
-  formatter?: (data: any, id?: string | number) => React.ReactNode
-}
+  accessorKey: string;
+  header: string;
+  className?: string;
+  formatter?: (data: any, id?: string | number) => React.ReactNode;
+};
 
 type TCourseTableProp = {
-  columns: TCoursColumnProp[]
-  tableData: any[]
-}
+  columns: TCoursColumnProp[];
+  tableData: any[];
+};
 export const CourseTable = ({ columns, tableData }: TCourseTableProp) => {
   return (
     <table className="w-full text-sm text-left rtl:text-right grid">
@@ -280,5 +290,5 @@ export const CourseTable = ({ columns, tableData }: TCourseTableProp) => {
         ))}
       </tbody>
     </table>
-  )
-}
+  );
+};

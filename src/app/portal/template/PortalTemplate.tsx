@@ -12,6 +12,7 @@ const PortalTemplate = ({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const router = useRouter();
   const { checkAuthUser } = useAuth();
+  const [currentUser, setCurrentUser] = useState<any>(null);
   useEffect(() => {
     const checkUser = async () => {
       const user = await checkAuthUser();
@@ -19,6 +20,7 @@ const PortalTemplate = ({
         router.push("/");
       }
       setIsAuthenticated(true);
+      setCurrentUser(user);
     };
     checkUser();
   }, [router, checkAuthUser]);
@@ -30,7 +32,7 @@ const PortalTemplate = ({
     <section className="relative">
       <Sidebar {...{ sidebarActive: sidebar, setSidebarActive: setSidebar }} />
       <main className="relative pl-[268px] max-xl:pl-0">
-        <Navbar />
+        <Navbar user={currentUser} />
         <section className="relative pl-[32px] pr-[40px] max-xl:px-[11px] py-[28px] bg-[#F7FAFC]">
           {children}
         </section>
