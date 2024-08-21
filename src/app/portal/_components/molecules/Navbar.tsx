@@ -1,10 +1,10 @@
-"use client";
-import React from "react";
-import Image from "next/image";
-import { LuBell } from "react-icons/lu";
-import { IoChevronDown } from "react-icons/io5";
+'use client'
+import React from 'react'
+import Image from 'next/image'
+import { LuBell } from 'react-icons/lu'
+import { IoChevronDown } from 'react-icons/io5'
 export const dummyAvatarUrl =
-  "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png";
+  'https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png'
 
 const Navbar = ({ user }: any) => {
   return (
@@ -27,15 +27,12 @@ const Navbar = ({ user }: any) => {
 
         <div className="text-left max-sm:hidden">
           <h6 className="text-[#020B17] text-[12px] font-medium leading-[18px]">
-            {user?.name ?? ""}
+            {user?.name ?? ''}
           </h6>
-          <p className="text-[#4B5460] text-[10px] font-medium leading-[15px]">
-            {user?.level ?? ""}/1023
-          </p>
         </div>
       </button>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
