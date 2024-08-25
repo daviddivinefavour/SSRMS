@@ -28,12 +28,6 @@ const students: MenuItem[] = [
     title: 'Course Registration',
     icon: <LuMenuSquare className="text-[20px]" />,
   },
-  {
-    url: 'results',
-    title: 'Result',
-    icon: <LuBook className="text-[20px]" />,
-    special: '',
-  },
 ]
 
 export const sidebarItems = {
