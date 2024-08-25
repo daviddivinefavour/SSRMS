@@ -61,7 +61,10 @@ const Dashboard = () => {
                     </TabsTrigger>
                   </TabsList>
                 </div>
-                <a href="" className="text-main-primary-main text-[.75rem]">
+                <a
+                  href="/portal/courses"
+                  className="text-main-primary-main text-[.75rem]"
+                >
                   View all &#8594;
                 </a>
               </div>

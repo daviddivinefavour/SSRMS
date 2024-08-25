@@ -102,12 +102,15 @@ const Courses = () => {
       getCourses()
     }
   }, [selectedSession])
+
   return (
     <>
       <div className="flex justify-between mb-5">
         <div className="">
           <h1 className="font-bold text-2xl">Courses</h1>
-          <p className="font-normal text-sm my-1">Level : {user.level}</p>
+          {user && (
+            <p className="font-normal text-sm my-1">Level : {user.level}</p>
+          )}
           {currentSession && (
             <p className="font-normal text-sm">Session: {currentSession}</p>
           )}
@@ -124,7 +127,7 @@ const Courses = () => {
       <div>
         <div className="grid grid-cols-12 gap-4 ">
           <div className="col-span-9">
-            <h4 className="mb-2 font-semibold">Courses ()</h4>
+            {/* <h4 className="mb-2 font-semibold">Courses ()</h4> */}
             <Card>
               <CardContent className="px-2 pt-2">
                 <CourseTable columns={columns} tableData={courses ?? []} />

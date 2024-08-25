@@ -87,10 +87,14 @@ export const getEnrolledCoursesForAcademicSession = async ({
   userId: string
 }) => {
   const { data, error } = await supabase
-    .from(ENTITIES.ENROLLMENTS)
-    .select('*')
+    .from('enrollments')
+    .select(
+      `
+      courses (title, description, level, semester, code, credit_unit)
+    `
+    )
     .eq('session_id', sessionId)
-    .eq('user_id', userId)
+    .eq('student_id', userId)
 
   if (!data || error) {
     console.error('Failed to fetch available courses')
