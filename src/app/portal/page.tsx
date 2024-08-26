@@ -1,24 +1,87 @@
-'use client'
-import Image from 'next/image'
-import moment from 'moment'
-import { Card, CardContent } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { CircularProgressbar } from 'react-circular-progressbar'
-import 'react-circular-progressbar/dist/styles.css'
-import { useAuth } from '@/context/auth.context'
-import { useEffect, useState } from 'react'
+"use client";
+import Image from "next/image";
+import moment from "moment";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import { useAuth } from "@/context/auth.context";
+import { use, useEffect, useState } from "react";
 
 const Dashboard = () => {
-  const today = moment().format('MMMM D, YYYY')
-  const { user, checkAuthUser } = useAuth()
-  const coursePercentage = 66
-  const assessmentPercentage = 80
-  const projectPercentage = 90
+  const today = moment().format("MMMM D, YYYY");
+  const { user, checkAuthUser } = useAuth();
+  // const coursePercentage = 66;
+  // const assessmentPercentage = 80;
+  // const projectPercentage = 90;
+  const [selectedSession, setSelectedSession] = useState<string | null>(null);
+  const [firstSemesterCourses, setFirstSemesterCourses] = useState<any[]>([]);
+  const [secondSemesterCourses, setSecondSemesterCourses] = useState<any[]>([]);
+
+  const getSessions = async () => {
+    const response = await fetch(`/api/sessions`);
+    const data = await response.json();
+    if (data.data) {
+      const sess = data.data.map((item: any) => ({
+        label: item.session_name,
+        value: item.id,
+      }));
+      const date = new Date();
+      const currentSession = `${date.getFullYear() - 1}/${date.getFullYear()}`;
+      const currentSess = sess.find(
+        (item: any) => item.label === currentSession
+      );
+      if (!selectedSession) {
+        setSelectedSession(currentSess?.value || null);
+      }
+    }
+  };
+  const getCourses = async () => {
+    if (user?.id && selectedSession) {
+      const a = await fetch(
+        `/api/registered-courses?userId=${user.id}&sessionId=${selectedSession}`
+      );
+      const data = await a.json();
+      if (data.data) {
+        const firstSemester = data.data.filter(
+          (item: any) => item.courses.semester == 1
+        );
+        const secondSemester = data.data.filter(
+          (item: any) => item.courses.semester == 2
+        );
+
+        const firstCourses = firstSemester.map((item: any) => ({
+          id: item.id,
+          title: item.courses.title,
+          code: item.courses.code,
+          unit: item.courses.credit_unit,
+          status: !item.is_deprecated ? "Approved" : "",
+        }));
+        const secondCourses = secondSemester.map((item: any) => ({
+          id: item.id,
+          title: item.courses.title,
+          code: item.courses.code,
+          unit: item.courses.credit_unit,
+          status: !item.is_deprecated ? "Approved" : "",
+        }));
+        setFirstSemesterCourses(firstCourses);
+        setSecondSemesterCourses(secondCourses);
+      }
+    }
+  };
   useEffect(() => {
     if (!user) {
-      checkAuthUser()
+      checkAuthUser();
     }
-  }, [user])
+  }, [user]);
+  useEffect(() => {
+    getSessions();
+  }, []);
+  useEffect(() => {
+    if (selectedSession) {
+      getCourses();
+    }
+  }, [selectedSession]);
   return (
     <>
       <Card className="py-3">
@@ -28,7 +91,7 @@ const Dashboard = () => {
               <small className="block text-[#5a5a5a]">{today}</small>
               <div className="mt-5">
                 <h1 className="font-bold text-2xl">
-                  Welcome back, {user?.name ?? ''}!
+                  Welcome back, {user?.name ?? ""}!
                 </h1>
                 <p className="text-sm">
                   Always stay updated on your personified portal
@@ -70,154 +133,35 @@ const Dashboard = () => {
               </div>
               <TabsContent value="firstSemester">
                 <div className="mt-4">
-                  <CourseTable columns={columns} tableData={movies} />
+                  <CourseTable
+                    columns={columns}
+                    tableData={firstSemesterCourses}
+                  />
                 </div>
               </TabsContent>
               <TabsContent value="secondSemester">
                 <div className="mt-4">
-                  <CourseTable columns={columns} tableData={movies} />
+                  <CourseTable
+                    columns={columns}
+                    tableData={secondSemesterCourses}
+                  />
                 </div>
               </TabsContent>
             </Tabs>
           </CardContent>
         </Card>
-        {/* <div className="col-span-5">
-          <h1 className="mb-2 font-semibold">Cumulative Grade</h1>
-          <Card>
-            <CardContent className="flex flex-col justify-between  py-2 gap-1">
-              <div className="flex justify-between items-center py-2 gap-1 border-b">
-                <div>
-                  <h4 className="font-semibold text-sm">Course Progress</h4>
-                  <p className="text-xs text-gray-400 mt-2">5 Completed</p>
-                  <small className="text-green-700 text-[.65rem] mt-[20px] block">
-                    2.76% &#8593; &#8593;
-                  </small>
-                </div>
-                <div style={{ width: 100, height: 100 }}>
-                  <CircularProgressbar
-                    value={coursePercentage}
-                    text={`${coursePercentage}%`}
-                    styles={{
-                      path: {
-                        // Path color
-                        stroke: `rgba(254, 98, 2)`,
-                        transform: "rotate(0.25turn)",
-                        transformOrigin: "center center",
-                      },
-                      text: {
-                        fill: "#fe6202",
-                        fontSize: "16px",
-                      },
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center py-2 gap-1 border-b">
-                <div>
-                  <h4 className="font-semibold text-sm">Assessment Progress</h4>
-                  <p className="text-xs text-gray-400 mt-2">7 Completed</p>
-                  <small className="text-green-700 text-[.65rem] mt-[20px] block">
-                    4.76% &#8593; &#8593;
-                  </small>
-                </div>
-                <div style={{ width: 100, height: 100 }}>
-                  <CircularProgressbar
-                    value={assessmentPercentage}
-                    text={`${assessmentPercentage}%`}
-                    styles={{
-                      path: {
-                        // Path color
-                        stroke: `rgba(21, 128, 61 )`,
-                        transform: "rotate(0.25turn)",
-                        transformOrigin: "center center",
-                      },
-                      text: {
-                        fill: "#15803d",
-                        fontSize: "16px",
-                      },
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center py-2 gap-1">
-                <div>
-                  <h4 className="font-semibold text-sm">Project Progress</h4>
-                  <p className="text-xs text-gray-400 mt-2">1 Completed</p>
-                  <small className="text-green-700 text-[.65rem] mt-[20px] block">
-                    1.76% &#8593; &#8593;
-                  </small>
-                </div>
-                <div style={{ width: 100, height: 100 }}>
-                  <CircularProgressbar
-                    value={projectPercentage}
-                    text={`${projectPercentage}%`}
-                    styles={{
-                      path: {
-                        // Path color
-                        stroke: `rgba(0, 37, 243, 1)`,
-                        transform: "rotate(0.25turn)",
-                        transformOrigin: "center center",
-                      },
-                      text: {
-                        fill: "#0027f2",
-                        fontSize: "16px",
-                      },
-                    }}
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div> */}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Dashboard
-
-const movies = [
-  {
-    id: 1,
-    title: 'COMPUTER TECHNOLOGY I (OO BASIC)',
-    code: 'Com 211',
-    unit: '4',
-    grade: 4,
-    status: 'Approved',
-  },
-  {
-    id: 2,
-    title: 'INTRODUCTION TO SYSTEM PROGRAMMING',
-    code: 'Com 212',
-    unit: '4',
-    grade: 4,
-    status: 'Approved',
-  },
-  {
-    id: 3,
-    title: 'COMMERCIAL PROGRAMMING LANGUAGE',
-    code: 'Com 213',
-    unit: '4',
-    grade: 4,
-    status: 'Approved',
-  },
-  {
-    id: 4,
-    title: 'FILE ORG. & MANAGEMENT',
-    code: 'Com 214',
-    unit: '4',
-    grade: 4,
-    status: 'Approved',
-  },
-]
+export default Dashboard;
 
 const columns = [
   {
-    accessorKey: 'title',
-    header: 'Course Title',
-    className: 'px-3 py-3 font-medium w-2/4',
+    accessorKey: "title",
+    header: "Course Title",
+    className: "px-3 py-3 font-medium w-2/4",
     formatter: (data: any, _) => (
       <>
         <p className="font-semibold text-[.75rem] uppercase">{data.code}</p>
@@ -226,44 +170,36 @@ const columns = [
     ),
   },
   {
-    accessorKey: 'unit',
-    header: 'Credit Unit',
-    className: 'px-3 py-3 font-medium flex justify-center items-center w-1/6',
+    accessorKey: "unit",
+    header: "Credit Unit",
+    className: "px-3 py-3 font-medium flex justify-center items-end w-1/4",
     formatter: (data: any, _) => (
       <p className="font-normal text-[.75rem]">{data.unit}</p>
     ),
   },
   {
-    accessorKey: 'grade',
-    header: 'Grade',
-    className: 'px-3 py-3 font-medium flex justify-center items-center w-1/6',
-    formatter: (data: any, _) => (
-      <p className="font-normal text-[.75rem]">{data.grade}</p>
-    ),
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    className: 'px-3 py-3 font-medium w-1/6 flex justify-start items-center',
+    accessorKey: "status",
+    header: "Status",
+    className: "px-3 py-3 font-medium w-1/4 flex justify-center items-end",
     formatter: (data: any, _) => (
       <p className="font-normal text-[.65rem] bg-green-100 text-green-700 rounded text-center uppercase px-1">
         {data.status}
       </p>
     ),
   },
-]
+];
 
 type TCoursColumnProp = {
-  accessorKey: string
-  header: string
-  className?: string
-  formatter?: (data: any, id?: string | number) => React.ReactNode
-}
+  accessorKey: string;
+  header: string;
+  className?: string;
+  formatter?: (data: any, id?: string | number) => React.ReactNode;
+};
 
 type TCourseTableProp = {
-  columns: TCoursColumnProp[]
-  tableData: any[]
-}
+  columns: TCoursColumnProp[];
+  tableData: any[];
+};
 export const CourseTable = ({ columns, tableData }: TCourseTableProp) => {
   return (
     <table className="w-full text-sm text-left rtl:text-right grid">
@@ -290,5 +226,5 @@ export const CourseTable = ({ columns, tableData }: TCourseTableProp) => {
         ))}
       </tbody>
     </table>
-  )
-}
+  );
+};
