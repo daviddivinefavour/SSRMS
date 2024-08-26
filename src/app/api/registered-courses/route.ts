@@ -40,7 +40,6 @@ export const GET = async (req: NextRequest) => {
   const searchParams = req.nextUrl.searchParams
   const userId = searchParams.get('userId')!
   const sessionId = searchParams.get('sessionId')!
-  console.table({ userId, sessionId })
 
   try {
     const courses = await getEnrolledCoursesForAcademicSession({

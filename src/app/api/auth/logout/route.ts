@@ -7,7 +7,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const result = await signOut()
 
     // handle the result of the sign-out attempt
-    if (!result || result.error) {
+    if (!result) {
       return NextResponse.json({ error: 'Error during sign-out' })
     } else {
       return NextResponse.json({ success: true })
